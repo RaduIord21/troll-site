@@ -4,7 +4,9 @@
 // - cea care sare în față la jumpscare (și din care se fac clonele din mosh pit)
 export const POZA_JUMPSCARE = 'jumpscare.png'
 // - cea afișată după jumpscare
-export const POZA = 'poza.png'
+export const POZA = 'poza.jpeg'
+// Ce parte din ea intră în cadru: 0% = sus, 100% = jos.
+export const POZA_INCADRARE = 'center 15%'
 
 // Sunetul de jumpscare (opțional): pune un fișier audio în `public/` cu numele ăsta.
 // Dacă lipsește, se folosește un țipăt sintetizat direct în browser.

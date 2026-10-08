@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { POZA, POZA_JUMPSCARE } from '../config.js'
+import { POZA, POZA_INCADRARE, POZA_JUMPSCARE } from '../config.js'
 import { burst, clearConfetti, pop } from '../confetti.js'
 import { audioReady, loadScreamFile, playBlegh, playScream, startDrone, unlockAudio } from '../audio.js'
 
@@ -109,9 +109,9 @@ export default function Poza() {
     setLipsa((l) => (l[kind] ? l : { ...l, [kind]: true }))
   }
 
-  const face = (kind, className) =>
+  const face = (kind, className, style) =>
     !lipsa[kind] ? (
-      <img src={POZE[kind].src} alt="Sărbătoritul" className={className} onError={() => markLipsa(kind)} draggable="false" />
+      <img src={POZE[kind].src} alt="Sărbătoritul" className={className} style={style} onError={() => markLipsa(kind)} draggable="false" />
     ) : (
       <span className={`${className} face-fallback`} role="img" aria-label="Sărbătoritul">💀</span>
     )
@@ -166,7 +166,7 @@ export default function Poza() {
 
       <div className="stage">
         <button className={`poster ${hit ? 'hit' : ''}`} onClick={onPosterClick} aria-label="Apasă pe poză">
-          {face('poza', 'poster-face')}
+          {face('poza', 'poster-face', { objectPosition: POZA_INCADRARE })}
           {blegh > 0 && <span key={blegh} className="blegh" aria-hidden="true">BLEGH!</span>}
         </button>
         <p key={caption} className="caption">{CAPTIONS[caption]}</p>

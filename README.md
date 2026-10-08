@@ -12,7 +12,8 @@ Site-cadou (React + Vite), frontend-only, publicat pe GitHub Pages.
 1. Două poze în `public/` (numele sunt setate în `src/config.js`):
    - `jumpscare.png` – sare în față la jumpscare; din ea se fac și clonele.
      Una decupată pe fundal transparent arată cel mai bine.
-   - `poza.png` – rămâne afișată după jumpscare.
+   - `poza.jpeg` – rămâne afișată după jumpscare, într-un cadru portret (3:4).
+     Partea care intră în cadru se reglează din `POZA_INCADRARE`.
 
    Dacă una lipsește, în locul ei apare un 💀.
 2. Sunetul e sintetizat în browser. Dacă vrei alt țipăt, pune un fișier în
