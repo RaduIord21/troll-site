@@ -1,0 +1,512 @@
+:root {
+  --black: #000000;
+  --bone: #ece6d6;
+  --blood: #a10a16;
+  --gore: #4a0d12;
+  --steel: #8a8d91;
+
+  --logo: 'Metal Mania', 'Impact', fantasy;
+  --flyer: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+
+  /* grain de fotocopie: deschis pentru fundal negru, închis pentru hârtie */
+  --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -0.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.2 -0.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* margine de hârtie ruptă */
+  --torn: polygon(0% 4%, 6% 0%, 14% 3%, 22% 0%, 31% 2%, 40% 0%, 52% 3%, 61% 0%, 70% 2%, 79% 0%, 88% 3%, 100% 0%, 99% 20%, 100% 41%, 98% 60%, 100% 80%, 99% 100%, 90% 97%, 80% 100%, 69% 97%, 58% 100%, 47% 98%, 36% 100%, 25% 97%, 14% 100%, 5% 97%, 0% 100%, 1% 78%, 0% 55%, 2% 33%, 0% 15%);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  font-family: var(--flyer);
+  color: var(--bone);
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 30%, var(--gore) 0%, var(--black) 72%) fixed,
+    var(--black);
+  overflow-x: hidden;
+}
+
+/* grain peste tot, inclusiv peste jumpscare */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 2000;
+  background-image: var(--grain-light);
+  opacity: 0.13;
+  pointer-events: none;
+  animation: grain 0.5s steps(4) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -4%); }
+  75% { transform: translate(-1%, 3%); }
+}
+
+button { font: inherit; }
+
+.page {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  overflow: hidden;
+}
+
+/* ---------- Titlu: logo thrash ---------- */
+
+/* fiecare literă aterizează ca o lovitură de tobă */
+.home { animation: rumble 0.09s linear 0.25s 15; }
+
+@keyframes rumble {
+  0%, 100% { transform: translate(0, 0); }
+  30% { transform: translate(-4px, 3px); }
+  65% { transform: translate(4px, -2px); }
+}
+
+.title {
+  --shadow: drop-shadow(0 0 1px var(--black)) drop-shadow(5px 5px 0 var(--blood)) drop-shadow(0 12px 30px rgb(161 10 22 / 0.6));
+  margin: 0;
+  font-family: var(--logo);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 15vw, 10.5rem);
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  filter: var(--shadow);
+  animation:
+    headbang 0.8s ease-in-out 1.8s infinite,
+    glitch 5s steps(1) 3s infinite;
+}
+
+/* pe telefon: două rânduri, mult mai mare */
+@media (max-width: 600px) {
+  .title { font-size: 21vw; line-height: 0.95; }
+}
+
+.title-word { white-space: nowrap; }
+
+.title-letter {
+  display: inline-block;
+  background: linear-gradient(180deg, #fff 0%, var(--bone) 38%, var(--steel) 50%, var(--bone) 60%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: slam 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+  animation-delay: calc(0.2s + var(--i) * 90ms);
+}
+
+@keyframes slam {
+  0% { opacity: 0; transform: scale(3.5) rotate(-12deg); filter: blur(8px); }
+  60% { opacity: 1; transform: scale(0.9); filter: blur(0); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* 150 bpm: două dăți pe ciclu */
+@keyframes headbang {
+  0%, 50%, 100% { transform: none; }
+  15% { transform: translateY(0.05em) skewX(-4deg) scaleY(0.94); }
+  65% { transform: translateY(0.05em) skewX(4deg) scaleY(0.94); }
+}
+
+@keyframes glitch {
+  0%, 92%, 98%, 100% { filter: var(--shadow); }
+  93% { filter: drop-shadow(-7px 0 0 #ff0033) drop-shadow(7px 0 0 #00e5ff); }
+  95% { filter: drop-shadow(6px -2px 0 #ff0033) drop-shadow(-6px 2px 0 #00e5ff); }
+  96.5% { filter: drop-shadow(-3px 1px 0 #ff0033) drop-shadow(3px 0 0 #00e5ff) blur(1px); }
+}
+
+.subtitle {
+  margin: 28px 0 44px;
+  font-size: clamp(1.15rem, 3.6vw, 1.6rem);
+  letter-spacing: 0.03em;
+  text-align: center;
+  opacity: 0;
+  animation: appear 0.4s 1.7s steps(3) forwards;
+}
+
+@keyframes appear { to { opacity: 1; } }
+
+/* ---------- Butoane: afișe rupte, lipite strâmb ---------- */
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  width: 100%;
+  max-width: 920px;
+  opacity: 0;
+  animation: appear 0.4s 1.9s steps(3) forwards;
+}
+
+.big-btn {
+  flex: 1 1 300px;
+  max-width: 420px;
+  color: var(--black);
+  text-decoration: none;
+  transform: rotate(var(--tilt));
+  transition: transform 0.12s;
+}
+
+.btn-poza { --tilt: -2deg; }
+.btn-sanatate {
+  --tilt: 1.5deg;
+  animation: twitch 3.2s 3.5s infinite;
+}
+
+.paper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+  padding: 32px 36px;
+  background: var(--grain-dark), var(--bone);
+  clip-path: var(--torn);
+  font-size: clamp(1.6rem, 4.4vw, 2.2rem);
+  line-height: 1.1;
+  text-align: center;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.big-btn:hover { transform: rotate(0deg) scale(1.04); }
+.big-btn:hover .paper { background: var(--grain-dark), var(--blood); color: var(--bone); }
+.big-btn:active { transform: scale(0.96); }
+.big-btn:focus-visible { outline: 3px dashed var(--bone); outline-offset: 8px; }
+
+/* butonul "sănătos" tresare din când în când, ca să atragă clicul */
+@keyframes twitch {
+  0%, 86%, 100% { rotate: 0deg; scale: 1; }
+  88% { rotate: 4deg; scale: 1.05; }
+  90% { rotate: -4deg; scale: 1.05; }
+  92% { rotate: 2deg; scale: 1.02; }
+}
+
+.flyer-foot {
+  margin: 56px 0 0;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--steel);
+  text-align: center;
+  opacity: 0;
+  animation: appear 0.4s 2.1s steps(3) forwards;
+}
+
+/* ---------- Ecrane pline: gate + încărcare ---------- */
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 16px;
+  background: var(--black);
+  text-align: center;
+}
+
+.screen-text {
+  margin: 0;
+  font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+  letter-spacing: 0.04em;
+}
+
+.flicker { animation: flicker 2.2s steps(1) infinite; }
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  41% { opacity: 0.25; }
+  43% { opacity: 1; }
+  77% { opacity: 0.5; }
+  78% { opacity: 1; }
+}
+
+.bar {
+  width: min(340px, 72vw);
+  height: 6px;
+  background: var(--gore);
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--bone);
+  animation: fill var(--dur) cubic-bezier(0.1, 0.6, 0.3, 1) forwards;
+}
+
+@keyframes fill { to { width: 88%; } }
+
+.ghost-btn {
+  padding: 12px 26px;
+  border: 2px solid var(--bone);
+  background: transparent;
+  color: var(--bone);
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.ghost-btn:hover { background: var(--bone); color: var(--black); }
+.ghost-btn:active { transform: scale(0.96); }
+.ghost-btn:focus-visible { outline: 3px dashed var(--bone); outline-offset: 5px; }
+
+/* ---------- Jumpscare ---------- */
+
+.scare {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.scare-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.35) saturate(1.3);
+  animation:
+    scare-in 0.1s ease-out both,
+    scare-shake 0.07s linear 0.1s infinite;
+}
+
+.scare-face.face-fallback { font-size: 70vmin; filter: none; }
+
+@keyframes scare-in {
+  from { transform: scale(0.15); }
+  to { transform: scale(1.12); }
+}
+
+@keyframes scare-shake {
+  0%, 100% { transform: scale(1.12) translate(0, 0); }
+  25% { transform: scale(1.14) translate(-12px, 8px) rotate(-1deg); }
+  50% { transform: scale(1.12) translate(10px, -10px); }
+  75% { transform: scale(1.15) translate(-8px, -6px) rotate(1deg); }
+}
+
+/* două flash-uri roșii, sub pragul de 3 pe secundă */
+.scare-flash {
+  position: absolute;
+  inset: 0;
+  background: var(--blood);
+  mix-blend-mode: multiply;
+  opacity: 0;
+  animation: flash 1.9s steps(1) forwards;
+}
+
+@keyframes flash {
+  0% { opacity: 0.85; }
+  8% { opacity: 0; }
+  40% { opacity: 0.7; }
+  48%, 100% { opacity: 0; }
+}
+
+/* ---------- Pagina cu poza ---------- */
+
+.back-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  padding: 10px 22px 12px;
+  background: var(--grain-dark), var(--bone);
+  clip-path: var(--torn);
+  color: var(--black);
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.back-btn:hover { background: var(--grain-dark), var(--blood); color: var(--bone); }
+.back-btn:focus-visible { outline: 3px dashed var(--bone); outline-offset: 4px; }
+
+.stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* fotocopie roșu-negru: alb devine sânge, negru rămâne negru */
+.poster {
+  position: relative;
+  width: min(72vw, 380px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  background: var(--blood);
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 0 7px var(--bone), 0 24px 70px rgb(161 10 22 / 0.5);
+  animation: poster-bang 0.8s ease-in-out infinite;
+}
+
+.poster:focus-visible { outline: 3px dashed var(--bone); outline-offset: 14px; }
+.poster.hit { animation: hit 0.075s linear 6; }
+
+.poster-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.8) brightness(1.08);
+  mix-blend-mode: multiply;
+}
+
+.poster-face.face-fallback { font-size: 11rem; mix-blend-mode: normal; filter: none; }
+
+@keyframes poster-bang {
+  0%, 50%, 100% { transform: rotate(-2deg); }
+  15% { transform: rotate(-3deg) translateY(10px) scaleY(0.97); }
+  65% { transform: rotate(-1deg) translateY(10px) scaleY(0.97); }
+}
+
+@keyframes hit {
+  0%, 100% { transform: rotate(-2deg) scale(1.05); }
+  33% { transform: rotate(-5deg) translate(-10px, 6px) scale(1.07); }
+  66% { transform: rotate(2deg) translate(10px, -6px) scale(1.07); }
+}
+
+.blegh {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-family: var(--logo);
+  font-size: clamp(3rem, 14vw, 6rem);
+  color: var(--bone);
+  -webkit-text-stroke: 2px var(--black);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: blegh 0.7s ease-out forwards;
+}
+
+@keyframes blegh {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.3) rotate(-14deg); }
+  35% { opacity: 1; transform: translate(-50%, -50%) scale(1.25) rotate(-6deg); }
+  100% { opacity: 0; transform: translate(-50%, -80%) scale(1.4) rotate(-6deg); }
+}
+
+.caption {
+  margin: 44px 0 0;
+  padding: 10px 24px 14px;
+  background: var(--blood);
+  color: var(--bone);
+  font-family: var(--logo);
+  font-size: clamp(1.4rem, 5.5vw, 2.3rem);
+  line-height: 1.1;
+  text-align: center;
+  transform: rotate(-3deg);
+  animation: caption-slam 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+
+@keyframes caption-slam {
+  from { opacity: 0; transform: scale(2.2) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1) rotate(-3deg); }
+}
+
+.hint {
+  margin: 22px 0 18px;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: var(--steel);
+  text-align: center;
+}
+
+/* mosh pit: clone care sar pe ecran ca logo-ul DVD */
+.clone-x {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: var(--s);
+  height: 100vh;
+  height: 100dvh;
+  pointer-events: none;
+  animation: bounce-x var(--dx) linear infinite alternate;
+  animation-delay: var(--delay);
+}
+
+.clone-y {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--s);
+  height: var(--s);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: bounce-y var(--dy) linear infinite alternate;
+  animation-delay: var(--delay);
+}
+
+@keyframes bounce-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw - var(--s))); }
+}
+
+@keyframes bounce-y {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(100dvh - var(--s))); }
+}
+
+.clone-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid var(--bone);
+  filter: grayscale(1) contrast(1.6) sepia(1) hue-rotate(-50deg) saturate(7) brightness(0.75);
+  transform: scaleX(var(--flip));
+  animation: clone-spin 2.6s linear infinite;
+}
+
+.clone-face.face-fallback { font-size: calc(var(--s) * 0.7); background: var(--black); filter: none; }
+
+@keyframes clone-spin {
+  to { rotate: 360deg; }
+}
+
+/* 💀 în locul pozei, până e pusă public/poza.jpg */
+.scare-face.face-fallback,
+.poster-face.face-fallback,
+.clone-face.face-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ---------- Mișcare redusă ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  body::after,
+  .home,
+  .title,
+  .title-letter,
+  .btn-sanatate,
+  .flicker,
+  .poster,
+  .scare-face,
+  .clone-face {
+    animation: none !important;
+  }
+  .clone-x, .clone-y { animation-play-state: paused; }
+}
