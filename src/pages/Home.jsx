@@ -5,7 +5,7 @@ import { LINKURI_SANATATE } from '../config.js'
 import { burst } from '../confetti.js'
 import { unlockAudio } from '../audio.js'
 
-const TITLU = 'La multi ani !'
+const TITLU = 'La multi ani Patric'
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
       <div className="buttons">
         {/* click-ul deblochează sunetul pentru jumpscare-ul de pe pagina următoare */}
         <Link to="/poza" className="big-btn btn-poza" onClick={unlockAudio}>
-          <span className="paper">Vezi poza sărbătoritului</span>
+          <span className="paper">Deschide cadoul</span>
         </Link>
 
         <a
@@ -37,8 +37,6 @@ export default function Home() {
           <span className="paper">Apasa aici ca sa fii sanatos si anu asta !</span>
         </a>
       </div>
-
-      <p className="flyer-foot">Intrare liberă. Ieșire pe propria răspundere.</p>
     </main>
   )
 }

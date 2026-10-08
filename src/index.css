@@ -77,7 +77,7 @@ button { font: inherit; }
   margin: 0;
   font-family: var(--logo);
   font-weight: 400;
-  font-size: clamp(3.4rem, 15vw, 10.5rem);
+  font-size: clamp(3.4rem, 12.5vw, 10.5rem);
   line-height: 1;
   text-align: center;
   cursor: pointer;
@@ -189,16 +189,6 @@ button { font: inherit; }
   88% { rotate: 4deg; scale: 1.05; }
   90% { rotate: -4deg; scale: 1.05; }
   92% { rotate: 2deg; scale: 1.02; }
-}
-
-.flyer-foot {
-  margin: 56px 0 0;
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  color: var(--steel);
-  text-align: center;
-  opacity: 0;
-  animation: appear 0.4s 2.1s steps(3) forwards;
 }
 
 /* ---------- Ecrane pline: gate + încărcare ---------- */

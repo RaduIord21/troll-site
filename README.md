@@ -2,7 +2,7 @@
 
 Site-cadou (React + Vite), frontend-only, publicat pe GitHub Pages.
 
-- `/` – „La multi ani !” în stil logo thrash + 2 butoane mari
+- `/` – „La multi ani Patric” în stil logo thrash + 2 butoane mari
 - `/#/poza` – „Se încarcă poza…” cu un drone care crește, apoi jumpscare cu țipăt:
   poza pe tot ecranul. După aceea rămâne afișată în stil fotocopie roșu-negru;
   click pe ea = „BLEGH!”, iar clonele lui sar prin ecran (mosh pit).
