@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { POZA } from '../config.js'
+import { POZA, POZA_JUMPSCARE } from '../config.js'
 import { burst, clearConfetti, pop } from '../confetti.js'
 import { audioReady, loadScreamFile, playBlegh, playScream, startDrone, unlockAudio } from '../audio.js'
 
-const SRC = `${import.meta.env.BASE_URL}${POZA}`
+const POZE = {
+  poza: { file: POZA, src: `${import.meta.env.BASE_URL}${POZA}` },
+  scare: { file: POZA_JUMPSCARE, src: `${import.meta.env.BASE_URL}${POZA_JUMPSCARE}` },
+}
 const SCARE_MS = 1900
 
 // fără diacritice: Metal Mania nu are ă, ș, ț
@@ -24,7 +27,7 @@ let nextId = 0
 function makeClone() {
   return {
     id: nextId++,
-    size: Math.round(rand(60, 120)),
+    size: Math.round(rand(90, 150)),
     dx: rand(4, 9).toFixed(2),
     dy: rand(3, 7).toFixed(2),
     delay: -rand(0, 10).toFixed(2),
@@ -36,7 +39,7 @@ function makeClone() {
 export default function Poza() {
   const [phase, setPhase] = useState(() => (audioReady() ? 'loading' : 'gate'))
   const [loadMs, setLoadMs] = useState(() => rand(2500, 4500))
-  const [imgOk, setImgOk] = useState(true)
+  const [lipsa, setLipsa] = useState({}) // pozele care nu s-au putut încărca
   const [clones, setClones] = useState(() => Array.from({ length: 3 }, makeClone))
   const [caption, setCaption] = useState(0)
   const [blegh, setBlegh] = useState(0)
@@ -45,9 +48,11 @@ export default function Poza() {
   const hitTimer = useRef()
 
   useEffect(() => {
-    const img = new Image()
-    img.onerror = () => setImgOk(false)
-    img.src = SRC
+    for (const [kind, { src }] of Object.entries(POZE)) {
+      const img = new Image()
+      img.onerror = () => markLipsa(kind)
+      img.src = src
+    }
     loadScreamFile().then((buf) => (screamFile.current = buf))
     return () => clearTimeout(hitTimer.current)
   }, [])
@@ -100,9 +105,13 @@ export default function Poza() {
     setClones((cs) => cs.filter((c) => c.id !== id))
   }
 
-  const face = (className) =>
-    imgOk ? (
-      <img src={SRC} alt="Sărbătoritul" className={className} onError={() => setImgOk(false)} draggable="false" />
+  function markLipsa(kind) {
+    setLipsa((l) => (l[kind] ? l : { ...l, [kind]: true }))
+  }
+
+  const face = (kind, className) =>
+    !lipsa[kind] ? (
+      <img src={POZE[kind].src} alt="Sărbătoritul" className={className} onError={() => markLipsa(kind)} draggable="false" />
     ) : (
       <span className={`${className} face-fallback`} role="img" aria-label="Sărbătoritul">💀</span>
     )
@@ -128,7 +137,7 @@ export default function Poza() {
   if (phase === 'scare') {
     return (
       <div className="scare" aria-hidden="true">
-        {face('scare-face')}
+        {face('scare', 'scare-face')}
         <div className="scare-flash" />
       </div>
     )
@@ -148,7 +157,7 @@ export default function Poza() {
             onClick={(e) => onCloneClick(e, c.id)}
             aria-label="Scoate-l din mosh pit"
           >
-            {face('clone-face')}
+            {face('scare', 'clone-face')}
           </button>
         </div>
       ))}
@@ -157,12 +166,14 @@ export default function Poza() {
 
       <div className="stage">
         <button className={`poster ${hit ? 'hit' : ''}`} onClick={onPosterClick} aria-label="Apasă pe poză">
-          {face('poster-face')}
+          {face('poza', 'poster-face')}
           {blegh > 0 && <span key={blegh} className="blegh" aria-hidden="true">BLEGH!</span>}
         </button>
         <p key={caption} className="caption">{CAPTIONS[caption]}</p>
         <p className="hint">
-          {imgOk ? 'Apasă pe poză. Apoi pe cei din mosh pit.' : `Pune poza în public/${POZA} ca să apară aici.`}
+          {Object.keys(lipsa).length === 0
+            ? 'Apasă pe poză. Apoi pe cei din mosh pit.'
+            : `Lipsește din public/: ${Object.keys(lipsa).map((k) => POZE[k].file).join(', ')}`}
         </p>
         <button className="ghost-btn" onClick={scareAgain}>Sperie-mă din nou</button>
       </div>

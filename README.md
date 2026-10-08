@@ -9,8 +9,12 @@ Site-cadou (React + Vite), frontend-only, publicat pe GitHub Pages.
 
 ## Personalizare
 
-1. Pune poza prietenului în `public/poza.jpg`. Pentru jumpscare contează mult:
-   una de aproape, cu fața mare, cât mai urâtă, e ideală. Până atunci apare un 💀.
+1. Două poze în `public/` (numele sunt setate în `src/config.js`):
+   - `jumpscare.png` – sare în față la jumpscare; din ea se fac și clonele.
+     Una decupată pe fundal transparent arată cel mai bine.
+   - `poza.png` – rămâne afișată după jumpscare.
+
+   Dacă una lipsește, în locul ei apare un 💀.
 2. Sunetul e sintetizat în browser. Dacă vrei alt țipăt, pune un fișier în
    `public/jumpscare.mp3` și va fi folosit automat.
 3. Linkurile de YouTube și numele fișierelor sunt în `src/config.js`.
