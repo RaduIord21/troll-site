@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import AnimatedTitle from '../components/AnimatedTitle.jsx'
 import { LINKURI_SANATATE } from '../config.js'
@@ -8,9 +8,12 @@ import { unlockAudio } from '../audio.js'
 const TITLU = 'La multi ani Patric'
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
-export default function Home() {
-  const [linkSanatate] = useState(() => random(LINKURI_SANATATE))
+// schimbă href-ul chiar înainte ca browserul să deschidă linkul
+const alegeLink = (e) => {
+  e.currentTarget.href = random(LINKURI_SANATATE)
+}
 
+export default function Home() {
   // confetti când aterizează ultima literă din titlu
   useEffect(() => {
     const t = setTimeout(burst, 200 + TITLU.length * 90)
@@ -28,8 +31,11 @@ export default function Home() {
           <span className="paper">Deschide cadoul</span>
         </Link>
 
+        {/* linkul se alege din nou la fiecare click (și la click pe rotiță) */}
         <a
-          href={linkSanatate}
+          href={LINKURI_SANATATE[0]}
+          onClick={alegeLink}
+          onAuxClick={alegeLink}
           target="_blank"
           rel="noopener noreferrer"
           className="big-btn btn-sanatate"
